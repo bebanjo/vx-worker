@@ -1,0 +1,7 @@
+# RABBITMQ_URL=amqp://guest:guest@localhost/%2f
+
+# VX_WORKERS=4
+# VX_DOCKER_IMAGE=dmexe/precise
+
+# AIRBRAKE_API_KEY=<key>
+# AIRBRAKE_HOST=<host>
