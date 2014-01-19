@@ -10,7 +10,7 @@ module Vx
 
       @@null_logger = Logger.new("/dev/null")
 
-      self.env_namespace = 'ci_worker'
+      self.env_namespace = 'vx'
       self.raise_missing_keys = true
 
       define amqp_url:     nil,
