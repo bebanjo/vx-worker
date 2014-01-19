@@ -1,0 +1,38 @@
+---
+- hosts: all
+  tags: elasticsearch
+  vars:
+    elasticsearch_url: https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${elasticsearch_version}.deb
+    elasticsearch_root: /usr/share/elasticsearch
+    elasticsearch_deb: /tmp/elasticsearch-${elasticsearch_version}.deb
+
+  tasks:
+
+  - name: elasticsearch | check installed
+    shell: test -f ${elasticsearch_root}/v${elasticsearch_version} && echo -n 'yes' || echo -n 'no'
+    register: elasticsearch_installed
+
+  - name: elasticsearch | download deb
+    get_url: dest=${elasticsearch_deb} url=${elasticsearch_url}
+    when: elasticsearch_installed.stdout == 'no'
+
+  - name: elasticsearch | install deb
+    shell: >
+      dpkg -i ${elasticsearch_deb}
+    when: elasticsearch_installed.stdout == 'no'
+
+  - name: elasticsearch | stop elasticsearch service
+    service: name=elasticsearch state=stopped
+    when: elasticsearch_installed.stdout == 'no'
+
+  - name: elasticsearch | remove temp files
+    shell: rm -f ${elasticsearch_deb}
+    when: elasticsearch_installed.stdout == 'no'
+
+  - name: elasticsearch | touch version
+    shell: touch ${elasticsearch_root}/v${elasticsearch_version}
+    when: elasticsearch_installed.stdout == 'no'
+
+  - name: elasticsearch | stop service
+    service: name=elasticsearch state=stopped
+    when: elasticsearch_installed.stdout == 'no'

@@ -1,0 +1,52 @@
+---
+- hosts: all
+  vars:
+    rbenv_root: /usr/local/rbenv
+    ruby_build_root: /usr/local/ruby-build
+    rbenv_path: /usr/local/bin/rbenv
+  tags: ruby
+
+  tasks:
+
+  - name: rbenv | update rbenv repo
+    git: repo=git://github.com/sstephenson/rbenv.git dest=$rbenv_root version=v0.4.0
+    register: rbenv_repo_created
+
+  - name: rbenv | add rbenv to path
+    file: src=${rbenv_root}/bin/rbenv path=${rbenv_path} state=link
+
+  - name: rbenv | create rbenv.patch file
+    copy:  src=files/rbenv.patch dest=${rbenv_root}/rbenv.patch
+    register: rbenv_patch_created
+
+  - name: rbenv | apply rbenv.patch
+    command: patch -N ${rbenv_root}/libexec/rbenv ${rbenv_root}/rbenv.patch
+    when: rbenv_patch_created.changed or rbenv_repo_created.changed
+
+  - name: rbenv | update ruby-build repo
+    git: repo=git://github.com/sstephenson/ruby-build.git dest=${ruby_build_root}
+
+  - name: rbenv | create gemrc
+    copy: src=files/gemrc dest=/etc/gemrc
+
+  - name: rbenv | check installed ruby versions
+    stat: path=${rbenv_root}/versions/${item}/bin
+    register: rbenv_installed_versions
+    with_items: $ruby_versions
+
+  - name: rbenv | install ruby versions
+    shell: >
+      ${ruby_build_root}/bin/ruby-build ${item.item} ${rbenv_root}/versions/${item.item} &&
+      env PATH=${rbenv_root}/versions/${item.item}/bin:\$PATH gem install bundler
+    with_items: ${rbenv_installed_versions.results}
+    when: item.stat.exists == False
+    notify:
+      - rbenv | rehash
+
+  - name: rbenv | set global version
+    template: src=templates/version dest=${rbenv_root}/version
+
+  handlers:
+
+  - name: rbenv | rehash
+    shell: rbenv rehash

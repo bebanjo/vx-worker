@@ -1,0 +1,20 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: build-essential | install required packages
+    apt: pkg=$item state=latest install_recommends=no
+    with_items:
+      - build-essential
+      - libcurl4-openssl-dev
+      - libssl-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - autoconf
+      - libyaml-dev
+      - libreadline6
+      - libreadline6-dev
+      - zlib1g
+      - zlib1g-dev
+      - imagemagick

@@ -1,0 +1,15 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: mysql | install packages
+    apt: pkg=$item state=latest install_recommends=no
+    environment:
+      RUNLEVEL: '1'
+    with_items:
+      - mysql-server-${mysql_version}
+      - libmysqlclient-dev
+
+  - name: mysql | stop mysql server
+    service: name=mysql state=stopped

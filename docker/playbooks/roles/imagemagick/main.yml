@@ -1,0 +1,10 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: imagemagick | install required packages
+    apt: pkg=$item state=latest install_recommends=no
+    with_items:
+      - "imagemagick"
+      - "libmagickwand-dev"

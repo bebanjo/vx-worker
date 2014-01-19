@@ -1,0 +1,22 @@
+---
+- hosts: all
+
+- include: roles/bootstrap/main.yml
+- include: roles/build-essential/main.yml
+
+- include: roles/java/main.yml
+- include: roles/rbenv/main.yml
+- include: roles/erlang/main.yml
+- include: roles/nodejs/main.yml
+
+- include: roles/phantomjs/main.yml
+- include: roles/imagemagick/main.yml
+
+- include: roles/postgresql/main.yml
+- include: roles/redis/main.yml
+- include: roles/mysql/main.yml
+- include: roles/rabbitmq/main.yml
+- include: roles/elasticsearch/main.yml
+
+- include: roles/services/main.yml
+- include: roles/cleanup/main.yml

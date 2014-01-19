@@ -1,0 +1,59 @@
+---
+- hosts: all
+  tags: java
+  vars:
+    jdk_switcher_root: /usr/local/jdk_switcher
+    jdk_switcher_bin_path: /usr/local/bin/jdk_switcher.sh
+
+  tasks:
+
+  - name: java | prepare fuse
+    shell: touch /dev/fuse creates=/dev/fuse
+
+  - name: java | install fuse
+    apt: pkg=fuse state=present
+
+  - name: java | install required packages
+    apt: pkg=$item state=latest
+    with_items:
+      - debconf
+      - debconf-utils
+
+  - name: java | install openjdk packages
+    apt: pkg=$item state=latest install_recommends=no
+    with_items: $java_packages
+
+  - name: java | add webupd8team repo
+    apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main' state=present
+
+  - name: java | add webupd8team repo key
+    apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xC2518248EEA14886 state=present
+
+  - name: java | retrieve status of oracle licences
+    shell: >
+      debconf-get-selections | grep -q ${item} && echo -n 'yes' || echo -n 'no'
+    register: java_license_status
+    with_items: $java_ora_versions
+
+  - name: java | accept oracle licenses
+    shell: >
+      /bin/echo -e ${item.item} shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+    when: item.stdout != "yes"
+    with_items: ${java_license_status.results}
+
+  - name: java | apt-get update (to fix cannot be authenticated error)
+    shell: apt-get update
+
+  - name: java | install oracle versions
+    apt: pkg=$item state=latest
+    with_items: $java_ora_versions
+
+  - name: java | update jdk_switcher repo
+    git: repo=git://github.com/michaelklishin/jdk_switcher.git dest=$jdk_switcher_root
+
+  - name: java | copy jdk_switcher to path
+    file: path=${jdk_switcher_bin_path} src=${jdk_switcher_root}/jdk_switcher.sh state=link
+
+  - name: java | set default version
+    shell: >
+      update-java-alternatives -s ${java_default_version}

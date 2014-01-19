@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require File.expand_path("../../lib/vx/worker", __FILE__)
+
+cli = Vx::Worker::CLI.new
+cli.run

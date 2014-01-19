@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tags: cleanup
+
+  tasks:
+
+  - name: cleanup | stop dbus-daemon service
+    service: name=dbus state=stopped
+
+  - name: cleanup | remove dbus-daemon pid file
+    file: path=/var/run/dbus/pid state=absent
+
+  - name: cleanup | clean apt cache
+    shell: apt-get -qy clean
+
+  - name: cleanup | autoremove apt packages
+    shell: apt-get -qy autoremove

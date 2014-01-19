@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tags: phantomjs
+  vars:
+    phantomjs_root: /usr/local/phantomjs-${phantomjs_version}-linux-x86_64
+    phantomjs_url: https://phantomjs.googlecode.com/files/phantomjs-${phantomjs_version}-linux-x86_64.tar.bz2
+    phantomjs_archive: /tmp/phantomjs-${phantomjs_version}.tar.bz2
+
+  tasks:
+
+  - name: phantomjs | check installed
+    shell: test -d ${phantomjs_root} && echo -n 'yes' || echo -n 'no'
+    register: phantomjs_installed
+
+  - name: phantomjs | download archive
+    get_url: dest=${phantomjs_archive} url=${phantomjs_url}
+    when: phantomjs_installed.stdout == 'no'
+
+  - name: phantomjs | install required packages
+    apt: pkg=${item}
+    with_items:
+      - bzip2
+
+  - name: phantomjs | unpack archive
+    shell: >
+      tar -jxf ${phantomjs_archive} -C /usr/local
+    when: phantomjs_installed.stdout == 'no'
+
+  - name: phantomjs | add to path
+    file: src=${phantomjs_root}/bin/phantomjs dest=/usr/local/bin/phantomjs state=link
+
+  - name: phantomjs | remove temp files
+    shell: rm -f ${phantomjs_archive}
+    when: phantomjs_installed.stdout == 'no'
