@@ -15,7 +15,7 @@ if [ "$1" == "install" ] || [ "$1" == "upgrade" ]; then
 
   if ! id vx-worker 1> /dev/null 2>&1; then
     groupadd -f -r vx-worker
-    useradd -d /var/lib/vexor/worker -g vx-worker -c "Vexor worker daemon" -s /usr/sbin/nologin -r vx-worker
+    useradd -d /var/lib/vexor/worker -g vx-worker -G docker -c "Vexor worker daemon" -s /usr/sbin/nologin -r vx-worker
   fi
 
   install -m 750 -o vx-worker -g vx-worker -d /var/lib/vexor/worker
