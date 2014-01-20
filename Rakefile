@@ -25,9 +25,3 @@ desc "run travis build"
 task :travis do
   exec "bundle exec rake SPEC_OPTS='--format documentation -t ~docker --order=rand'"
 end
-
-desc "build package"
-task :package do
-  exec "dist/build.sh"
-end
-
