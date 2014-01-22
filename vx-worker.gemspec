@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'vx-common',               "= 0.2.1"
-  spec.add_runtime_dependency 'vx-message',              "= 0.2.1"
+  spec.add_runtime_dependency 'vx-message',              "= 0.4.1"
   spec.add_runtime_dependency 'vx-container_connector',  "= 0.2.3"
   spec.add_runtime_dependency 'vx-common-amqp',          '~> 0.2.6'
   spec.add_runtime_dependency 'hashr',                   '= 0.0.22'

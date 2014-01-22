@@ -51,11 +51,11 @@ module Vx
         def create_message(job, status)
           tm = Time.now
           Message::JobStatus.new(
-            build_id: job.message.id,
-            job_id:   job.message.job_id,
-            status:   status,
-            tm:       tm.to_i,
-            matrix:   job.message.matrix_keys
+            project_id: job.message.project_id,
+            build_id:   job.message.id,
+            job_id:     job.message.job_id,
+            status:     status,
+            tm:         tm.to_i,
           )
         end
 
