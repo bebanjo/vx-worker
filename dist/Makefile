@@ -17,19 +17,33 @@ PACKAGE_NAME     := $(SOURCE_NAME)-$(PACKAGE_VERSION)
 PACKAGE          := $(PACKAGE_NAME)_$(VERSION)
 
 WORK_DIR         := .tmp/$(SOURCE_NAME)
-ARCHIVE          := .tmp/$(SOURCE_NAME).tar.gz
+SOURCE_ARCHIVE   := $(SOURCE_NAME).tar.gz
+ARCHIVE          := .tmp/$(SOURCE_ARCHIVE)
 
 SRC              := $(wildcard *.mk)
 DST              := $(patsubst %.mk,%,$(SRC))
+OSC_ROOT         := $(shell mktemp -d)
+OSC_PROJECT      := home:dmexe:vexor
+OSC_ARCHIVE      := $(OSC_ROOT)/$(SOURCE_ARCHIVE)
 
 HOST             := vexor.io
 
-all: $(ARCHIVE) $(DST)
+all: $(DST) $(ARCHIVE) $(OSC_ARCHIVE)
 
 clean:
 	@echo " --> remove $(ARCHIVE) $(DST)"
 	@rm -rf $(ARCHIVE)
 	@rm -f $(DST)
+
+$(OSC_ARCHIVE): $(ARHIVE)
+	@echo " --> checkout $(OSC_PROJECT)/$(PACKAGE_NAME) to $(OSC_ROOT)"
+	@osc co $(OSC_PROJECT) $(PACKAGE_NAME) -o $(OSC_ROOT)
+	@echo " --> complete remove old revision"
+	@(cd $(OSC_ROOT) && ls --hide='.*' | xargs -I {} rm {})
+	@echo " --> copy files"
+	@cp * $(OSC_ROOT)
+	cp $(ARCHIVE) $(OSC_ARCHIVE)
+	@(cd $(OSC_ROOT) && osc addremove)
 
 $(ARCHIVE):
 	@echo " --> export to $(WORK_DIR)"

@@ -1,2 +1,3 @@
 bundle opt/vexor/worker/bundle
 lib opt/vexor/worker/lib
+debian/ci_env /etc/vexor/ci

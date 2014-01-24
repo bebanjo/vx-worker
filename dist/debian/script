@@ -1,6 +1,0 @@
-#!/bin/sh
-
-RUBY=/opt/vexor/ruby/bin/ruby
-REQ=/opt/vexor/worker/bundle/bundler/setup.rb
-
-exec ${RUBY} -r ${REQ} /opt/vexor/worker/bin/vx-worker $*
