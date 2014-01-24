@@ -18,3 +18,6 @@ tmp
 fixtures/
 .tmp/
 .vagrant/
+dist/vx-worker.dsc
+dist/debian.control
+dist/debian.changelog
