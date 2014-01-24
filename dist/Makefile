@@ -2,6 +2,7 @@ SUFFIX           := vx0
 
 RUBY_VERSION     := 2.0
 RUBY             := vx-embeded-ruby-$(RUBY_VERSION)
+BUNDLER          := vx-embeded-bundler-$(RUBY_VERSION)
 
 GIT_ROOT         := $(shell git rev-parse --show-toplevel)
 GIT_DATE         := $(shell git log -n1 --format="%aD")
@@ -22,28 +23,39 @@ ARCHIVE          := .tmp/$(SOURCE_ARCHIVE)
 
 SRC              := $(wildcard *.mk)
 DST              := $(patsubst %.mk,%,$(SRC))
-OSC_ROOT         := $(shell mktemp -d)
+OSC_ROOT         := .tmp/build
 OSC_PROJECT      := home:dmexe:vexor
 OSC_ARCHIVE      := $(OSC_ROOT)/$(SOURCE_ARCHIVE)
 
 HOST             := vexor.io
 
-all: $(DST) $(ARCHIVE) $(OSC_ARCHIVE)
-
 clean:
-	@echo " --> remove $(ARCHIVE) $(DST)"
+	@echo " --> remove $(ARCHIVE) $(DST) $(OSC_ROOT)"
 	@rm -rf $(ARCHIVE)
 	@rm -f $(DST)
+	@rm -rf $(OSC_ROOT)
 
-$(OSC_ARCHIVE): $(ARHIVE)
+build: $(OSC_ARCHIVE)
+	@(cd $(OSC_ROOT) && osc build)
+
+build-no-init: $(OSC_ARCHIVE)
+	@(cd $(OSC_ROOT) && osc build --no-init)
+
+release: $(OSC_ARCHIVE)
+	@echo " --> commit to OBS"
+	@(cd $(OSC_ROOT) && osc addremove)
+	@(cd $(OSC_ROOT) && osc ci -m "bump")
+
+copy: $(OSC_ARCHIVE)
+
+$(OSC_ARCHIVE): $(ARCHIVE) $(DST)
 	@echo " --> checkout $(OSC_PROJECT)/$(PACKAGE_NAME) to $(OSC_ROOT)"
-	@osc co $(OSC_PROJECT) $(PACKAGE_NAME) -o $(OSC_ROOT)
+	@test -d $(OSC_ROOT) || osc co $(OSC_PROJECT) $(PACKAGE_NAME) -o $(OSC_ROOT)
 	@echo " --> complete remove old revision"
 	@(cd $(OSC_ROOT) && ls --hide='.*' | xargs -I {} rm {})
 	@echo " --> copy files"
 	@cp * $(OSC_ROOT)
-	cp $(ARCHIVE) $(OSC_ARCHIVE)
-	@(cd $(OSC_ROOT) && osc addremove)
+	@cp $(ARCHIVE) $(OSC_ARCHIVE)
 
 $(ARCHIVE):
 	@echo " --> export to $(WORK_DIR)"
@@ -64,5 +76,6 @@ $(ARCHIVE):
 	| sed 's/%RUBY%/$(RUBY)/g' \
 	| sed 's/%USER%/$(USER)/g' \
 	| sed 's/%HOST%/$(HOST)/g' \
-	| sed 's/%DATE%/$(DATE)/g' \
+	| sed 's/%BUNDLER%/$(BUNDLER)/g' \
+	| sed 's/%DATE%/$(GIT_DATE)/g' \
 	> $@

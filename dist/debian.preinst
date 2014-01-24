@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+# summary of how this script can be called:
+#        * <new-preinst> `install'
+#        * <new-preinst> `install' <old-version>
+#        * <new-preinst> `upgrade' <old-version>
+#        * <old-preinst> `abort-upgrade' <new-version>
+#
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+if [ "$1" == "install" ] || [ "$1" == "upgrade" ]; then
+
+  if ! id vx-worker 1> /dev/null 2>&1; then
+    groupadd -f -r vx-worker
+    useradd -d /opt/vexor/worker -g vx-worker -c "Vexor worker daemon" -r vx-worker
+  fi
+fi
+
+#DEBHELPER#
+
+exit 0
+
