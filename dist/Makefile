@@ -22,6 +22,8 @@ ARCHIVE          := .tmp/$(SOURCE_NAME).tar.gz
 SRC              := $(wildcard *.mk)
 DST              := $(patsubst %.mk,%,$(SRC))
 
+HOST             := vexor.io
+
 all: $(ARCHIVE) $(DST)
 
 clean:
