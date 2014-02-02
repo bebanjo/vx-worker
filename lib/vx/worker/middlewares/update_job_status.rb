@@ -61,7 +61,13 @@ module Vx
 
         def publish_status(message)
           logger.info "delivered job status #{message.inspect}"
-          JobStatusConsumer.publish message
+          JobStatusConsumer.publish(
+            message,
+            headers: {
+              build_id:   message.build_id,
+              job_id:     message.job_id
+            }
+          )
         end
 
     end

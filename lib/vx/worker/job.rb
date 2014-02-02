@@ -40,7 +40,13 @@ module Vx
           tm:       output_counter,
           log:      str
         )
-        JobLogsConsumer.publish log
+        JobLogsConsumer.publish(
+          log,
+          headers: {
+            build_id: log.build_id,
+            job_id:   log.job_id
+          }
+        )
         log
       end
 
