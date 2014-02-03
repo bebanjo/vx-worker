@@ -11,7 +11,7 @@ module Vx
           head = prop[:headers] || {}
 
           Vx::Instrumentation.with("@fields" => head) do
-            @app.call(env)
+            app.call(env)
           end
         end
       end
