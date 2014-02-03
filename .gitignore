@@ -22,3 +22,4 @@ dist/vx-worker.dsc
 dist/debian.control
 dist/debian.changelog
 dist/debian.rules
+log/

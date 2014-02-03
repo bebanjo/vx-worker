@@ -8,25 +8,28 @@ module Vx
     StartConnector = Struct.new(:app) do
 
       include Helper::Config
-      include Helper::Logger
+      include Helper::Instrument
 
       def call(env)
         options = config.connector_options
-        options.merge! logger: logger
         env.connector = ContainerConnector.lookup(config.run, options)
+
+        instrument("starting_container", env.job.instrumentation)
+
         env.connector.start do |spawner|
           env.job.add_to_output "using #{Socket.gethostname}##{spawner.id}\n"
-          logger.tagged("#{spawner.id}") do
-            begin
-              env.spawner = spawner
-              app.call env
-            ensure
-              env.spawner = spawner
-            end
+
+          instrument("container_started", env.job.instrumentation.merge(container: spawner.id))
+
+          begin
+            env.spawner = spawner
+            app.call env
+          ensure
+            env.spawner = spawner
           end
         end
       end
-    end
 
+    end
   end
 end

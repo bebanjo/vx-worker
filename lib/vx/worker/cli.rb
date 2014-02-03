@@ -7,7 +7,6 @@ module Vx
     class CLI
 
       include Helper::Config
-      include Helper::Logger
       include Common::EnvFile
 
       def initialize

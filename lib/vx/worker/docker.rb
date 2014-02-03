@@ -18,7 +18,7 @@ module Vx
       end
 
       def initialize(job, _)
-        @job         = job
+        @job = job
       end
 
       def perform
