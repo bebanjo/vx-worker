@@ -46,6 +46,10 @@ module Vx
       private
 
         def update_status(job, status)
+          instrument(
+            "update_job_status",
+            job.instrumentation.merge(status: status)
+          )
           publish_status create_message(job, status)
         end
 

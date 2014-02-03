@@ -7,9 +7,7 @@ module Vx
 
       def call(env)
         instrument("start_processing", env.job.instrumentation)
-        instrument("process_job", env.job.instrumentation) do
-          app.call env
-        end
+        app.call env
       end
 
     end

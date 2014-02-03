@@ -12,14 +12,10 @@ module Vx
       def call(env)
         if env.spawner
           instrument("staring_script", env.job.instrumentation)
-          code = instrument("run_script", env.job.instrumentation) do
-            run_script(env)
-          end
+          code = run_script(env)
 
           instrument("starting_after_script", env.job.instrumentation)
-          instrument("run_after_script", env.job.instrumentation) do
-            run_after_script(env)
-          end
+          run_after_script(env)
 
           if code == 0
             app.call env
