@@ -25,22 +25,14 @@ module Vx
     autoload :RunScript,             File.expand_path("../worker/middlewares/run_script",              __FILE__)
 
     module Helper
-      autoload :Logger,              File.expand_path("../worker/helper/logger",                       __FILE__)
       autoload :Config,              File.expand_path("../worker/helper/config",                       __FILE__)
+      autoload :Instrument,          File.expand_path("../worker/helper/instrument",                   __FILE__)
     end
 
     extend self
 
     @@root   = Pathname.new File.expand_path('../../..', __FILE__)
     @@config_mutex = Mutex.new
-
-    def logger
-      if ENV['CI_WORKER_SILENT']
-        config.null_logger
-      else
-        config.logger
-      end
-    end
 
     def configure
       yield config

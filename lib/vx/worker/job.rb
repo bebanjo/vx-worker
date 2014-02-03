@@ -5,8 +5,6 @@ module Vx
   module Worker
     class Job
 
-      include Helper::Logger
-
       attr_reader :output, :message, :output_counter
 
       def initialize(perform_job_message)
@@ -17,7 +15,13 @@ module Vx
 
       def add_to_output(str)
         output << str
-        logger.debug str.strip if logger.level == 0
+      end
+
+      def instrumentation
+        {
+          job_id:   message.job_id,
+          build_id: message.id
+        }
       end
 
       def add_command_to_output(cmd)

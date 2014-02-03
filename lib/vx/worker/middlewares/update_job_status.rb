@@ -1,12 +1,13 @@
 require 'vx/message'
 require 'vx/common/error_notifier'
+require 'airbrake'
 
 module Vx
   module Worker
 
     UpdateJobStatus = Struct.new(:app) do
 
-      include Helper::Logger
+      include Helper::Instrument
 
       STARTED  = 2
       FINISHED = 3
@@ -22,9 +23,9 @@ module Vx
         rescue ::Timeout::Error => e
           env.job.add_to_output("\n\nERROR: #{e.message}\n")
         rescue ::Exception => e
-          env.job.add_to_output("\n\nERROR: #{e.inspect}\n")
-          logger.error("ERROR: #{e.inspect}\n    BACKTRACE:\n#{e.backtrace.map{|i| "    #{i}" }.join("\n")}")
-          Common::ErrorNotifier.notify(e)
+          $stderr.puts "#{e.inspect}"
+          $stderr.puts e.backtrace.map{|b| "    #{b}" }.join("\n")
+          Airbrake.notify(e, (env || {}).to_h)
         end
 
         msg = "\nDone. Your build exited with %s.\n"
@@ -60,7 +61,6 @@ module Vx
         end
 
         def publish_status(message)
-          logger.info "delivered job status #{message.inspect}"
           JobStatusConsumer.publish(
             message,
             headers: {

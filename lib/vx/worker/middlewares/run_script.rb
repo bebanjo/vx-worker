@@ -5,14 +5,21 @@ module Vx
 
     RunScript = Struct.new(:app) do
 
-      include Helper::Logger
       include Helper::Config
+      include Helper::Instrument
       include Common::Helper::UploadShCommand
 
       def call(env)
         if env.spawner
-          code = run_script(env)
-          run_after_script(env)
+          instrument("staring_script", env.job.instrumentation)
+          code = instrument("run_script", env.job.instrumentation) do
+            run_script(env)
+          end
+
+          instrument("starting_after_script", env.job.instrumentation)
+          instrument("run_after_script", env.job.instrumentation) do
+            run_after_script(env)
+          end
 
           if code == 0
             app.call env

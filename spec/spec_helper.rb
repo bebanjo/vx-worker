@@ -23,5 +23,6 @@ RSpec.configure do |config|
       }
 =end
     end
+    Vx::Worker.initialize!
   end
 end

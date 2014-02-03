@@ -7,9 +7,10 @@ describe Vx::Worker::Job do
   subject { job }
 
   context "just created" do
-    its(:message)        { should eq message }
-    its(:output)         { should be_an_instance_of(Vx::Common::OutputBuffer) }
-    its(:output_counter) { should eq 0 }
+    its(:message)         { should eq message }
+    its(:output)          { should be_an_instance_of(Vx::Common::OutputBuffer) }
+    its(:output_counter)  { should eq 0 }
+    its(:instrumentation) { should eq(job_id: 2, build_id: 1) }
   end
 
   context "publish_job_log_message" do

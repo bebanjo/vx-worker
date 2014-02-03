@@ -3,14 +3,12 @@ module Vx
 
     LogJob = Struct.new(:app) do
 
-      include Helper::Logger
+      include Helper::Instrument
 
       def call(env)
-        logger.tagged("job #{env.job.message.id}.#{env.job.message.job_id}") do
-          logger.info "starting job"
-          rs = app.call env
-          logger.info "done job"
-          rs
+        instrument("start_processing", env.job.instrumentation)
+        instrument("process_job", env.job.instrumentation) do
+          app.call env
         end
       end
 
