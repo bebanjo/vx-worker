@@ -1,5 +1,5 @@
 module Vx
   module Worker
-    VERSION = "0.3.0.pre0"
+    VERSION = "0.3.0.pre1"
   end
 end
