@@ -19,7 +19,7 @@ module Vx
         env.connector.start do |spawner|
           env.job.add_to_output "using #{Socket.gethostname}##{spawner.id}\n"
 
-          instrument("processing_container", env.job.instrumentation.merge(container: spawner.id))
+          instrument("container_started", env.job.instrumentation.merge(container: spawner.id))
 
           begin
             env.spawner = spawner

@@ -6,7 +6,7 @@ module Vx
       include Helper::Instrument
 
       def call(env)
-        instrument("start_processing", env.job.instrumentation)
+        instrument("starting_job", env.job.instrumentation)
         app.call env
       end
 
