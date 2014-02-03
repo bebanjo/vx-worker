@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'vx-common',               "= 0.2.1"
   spec.add_runtime_dependency 'vx-message',              "= 0.4.1"
   spec.add_runtime_dependency 'vx-container_connector',  "= 0.2.9"
-  spec.add_runtime_dependency 'vx-common-amqp',          '= 0.3.7'
+  spec.add_runtime_dependency 'vx-common-amqp',          '= 0.3.8'
   spec.add_runtime_dependency 'vx-instrumentation',      '= 0.0.8'
 
   spec.add_runtime_dependency 'hashr',                   '= 0.0.22'

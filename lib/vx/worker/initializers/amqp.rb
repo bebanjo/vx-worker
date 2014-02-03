@@ -1,6 +1,7 @@
 require 'airbrake'
 require 'vx/common/amqp'
 require 'active_support/notifications'
+require 'vx/instrumentation'
 
 module Vx
   module Worker

@@ -1,6 +1,8 @@
 require 'vx/message'
 require 'vx/common/error_notifier'
+
 require 'airbrake'
+require 'vx/instrumentation'
 
 module Vx
   module Worker
@@ -25,6 +27,7 @@ module Vx
         rescue ::Exception => e
           $stderr.puts "#{e.inspect}"
           $stderr.puts e.backtrace.map{|b| "    #{b}" }.join("\n")
+          Vx::Instrumentation.handle_exception("worker", e, env)
           Airbrake.notify(e, (env || {}).to_h)
         end
 
