@@ -14,11 +14,9 @@ module Vx
       model Message::PerformJob
 
       def perform(message)
-        job         = Job.new message
-        number      = Thread.current[:consumer_id] || 0
-        path_prefix = "/tmp/.worker/job.#{number}"
-        Worker.perform(job, path_prefix)
-        ack!
+        job = Job.new message
+        Worker.perform(job)
+        ack
       end
 
     end

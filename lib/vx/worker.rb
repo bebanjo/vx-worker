@@ -2,6 +2,9 @@ require 'rubygems'
 require 'pathname'
 require 'thread'
 
+require 'dotenv'
+Dotenv.load "#{File.expand_path("../../../", __FILE__)}/.env", "/etc/vexor/ci"
+
 require File.expand_path("../worker/ext/string", __FILE__)
 require File.expand_path("../worker/version",    __FILE__)
 
@@ -51,8 +54,8 @@ module Vx
       @@root
     end
 
-    def perform(job, path_prefix)
-      rs = run_class.new(job, path_prefix).perform
+    def perform(job)
+      rs = run_class.new(job).perform
       job.release
       rs
     end

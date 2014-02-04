@@ -1,7 +1,10 @@
-require 'airbrake'
 require 'vx/consumer'
-require 'active_support/notifications'
 require 'vx/instrumentation'
+
+require 'active_support/notifications'
+
+
+$stdout.puts ' --> initializing Vx::Consumer'
 
 module Vx
   module Worker
@@ -22,11 +25,9 @@ Vx::Consumer.configure do |c|
   c.content_type = 'application/x-protobuf'
   c.instrumenter = ActiveSupport::Notifications
 
-  c.use :pub, Vx::Worker::ConsumerMiddleware
   c.use :sub, Vx::Worker::ConsumerMiddleware
 
   c.on_error do |e, env|
     Vx::Instrumentation.handle_exception("worker", e, env)
-    Airbrake.notify(e, env)
   end
 end
