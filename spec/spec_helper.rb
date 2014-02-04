@@ -1,6 +1,7 @@
+Bundler.require(:test)
+
 require File.expand_path '../../lib/vx/worker', __FILE__
 
-Bundler.require(:test)
 require 'rspec/autorun'
 require 'vx/consumer/testing'
 require 'vx/message/testing'
@@ -13,16 +14,8 @@ RSpec.configure do |config|
   config.before(:each) do
     Vx::Consumer::Testing.clear
     Vx::Worker.reset_config!
+    Vx::Worker.config.run = "docker"
 
-    Vx::Worker.configure do |c|
-=begin
-      c.docker.ssh.port = 2223
-      c.docker.ssh.host = 'localhost'
-      c.docker.create_options = {
-        'PortSpecs' => ['2022:22']
-      }
-=end
-    end
     Vx::Worker.initialize!
   end
 end

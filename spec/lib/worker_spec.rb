@@ -5,7 +5,7 @@ describe Vx::Worker do
   context ".perform" do
     let(:job) { create :job }
     let(:run) { :docker }
-    subject { described_class.perform job, '/tmp' }
+    subject { described_class.perform job }
 
     before do
       described_class.configure do |c|

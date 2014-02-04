@@ -5,7 +5,7 @@ module Vx
     module Helper::Instrument
 
       def instrument(event, payload, &block)
-        ActiveSupport::Notifications.instrument("#{event}.worker", payload, &block)
+        ActiveSupport::Notifications.instrument("#{event}.worker.vx", payload, &block)
       end
 
     end
