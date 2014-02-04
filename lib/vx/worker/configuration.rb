@@ -14,7 +14,6 @@ module Vx
              timeout:      30 * 60,
 
              workers:          1,
-             path_prefix:      nil,
 
              docker: {
                user:       nil,
@@ -34,10 +33,6 @@ module Vx
 
       def run
         self[:run].to_sym
-      end
-
-      def path_prefix
-        self[:path_prefix] || Dir.pwd
       end
 
       def connector_options
