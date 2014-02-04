@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Vx::Worker::Docker, docker: true do
   let(:options) { { } }
   let(:job)     { create :job, options }
-  let(:local)   { described_class.new job, nil }
+  let(:local)   { described_class.new job }
   subject { local }
 
   context "perform" do

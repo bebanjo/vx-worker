@@ -17,7 +17,7 @@ module Vx
         use RunScript
       end
 
-      def initialize(job, _)
+      def initialize(job)
         @job = job
       end
 

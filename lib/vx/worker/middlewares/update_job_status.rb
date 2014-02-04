@@ -25,9 +25,9 @@ module Vx
         rescue ::Timeout::Error => e
           env.job.add_to_output("\n\nERROR: #{e.message}\n")
         rescue ::Exception => e
-          $stderr.puts "#{e.inspect}"
-          $stderr.puts e.backtrace.map{|b| "    #{b}" }.join("\n")
-          Vx::Instrumentation.handle_exception("worker", e, env)
+          $stderr.puts "#{e.class}, #{e.message}"
+          $stderr.puts e.backtrace.map{|b| "\t#{b}" }.join("\n")
+          Vx::Instrumentation.handle_exception("worker", e, env.to_h)
           Airbrake.notify(e, (env || {}).to_h)
         end
 

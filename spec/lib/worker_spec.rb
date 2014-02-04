@@ -5,7 +5,7 @@ describe Vx::Worker do
   context ".perform" do
     let(:job) { create :job }
     let(:run) { :docker }
-    subject { described_class.perform job, '/tmp' }
+    subject { described_class.perform job }
 
     before do
       described_class.configure do |c|
@@ -17,7 +17,7 @@ describe Vx::Worker do
       let(:run) { :docker }
       let(:docker) { 'docker' }
       before do
-        mock(Vx::Worker::Docker).new(job, '/tmp') { docker }
+        mock(Vx::Worker::Docker).new(job) { docker }
         mock(docker).perform { true }
       end
 
@@ -28,7 +28,7 @@ describe Vx::Worker do
       let(:run) { :local }
       let(:local) { 'local' }
       before do
-        mock(Vx::Worker::Local).new(job, '/tmp') { local }
+        mock(Vx::Worker::Local).new(job) { local }
         mock(local).perform { true }
       end
 
