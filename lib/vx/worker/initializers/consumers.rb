@@ -26,6 +26,7 @@ Vx::Consumer.configure do |c|
   c.instrumenter = ActiveSupport::Notifications
 
   c.use :sub, Vx::Worker::ConsumerMiddleware
+  c.use :pub, Vx::Worker::ConsumerMiddleware
 
   c.on_error do |e, env|
     Vx::Instrumentation.handle_exception("worker", e, env)
