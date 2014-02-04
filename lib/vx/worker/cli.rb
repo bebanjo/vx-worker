@@ -1,6 +1,6 @@
 require 'optparse'
-require 'vx/common/amqp_setup'
 require 'vx/common'
+require 'vx/consumer'
 
 module Vx
   module Worker
@@ -18,13 +18,15 @@ module Vx
       def run
         trap('INT') {
           Thread.new do
-            Vx::Common::AMQP.shutdown
+            Vx::Consumer.shutdown
           end.join
         }
 
-        Vx::Common::AMQP::Supervisor::Threaded.build(
-          Vx::Worker::JobsConsumer => config.workers,
-        ).run
+        workers = []
+        config.workers.times do |n|
+          workers << Vx::Worker::JobsConsumer.subscribe
+        end
+        workers.map(&:wait)
       end
 
       private

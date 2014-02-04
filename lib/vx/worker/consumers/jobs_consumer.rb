@@ -1,15 +1,15 @@
-require 'vx/common/amqp'
+require 'vx/consumer'
 require 'vx/message'
 
 module Vx
   module Worker
     class JobsConsumer
 
-      include Vx::Common::AMQP::Consumer
+      include Vx::Consumer
 
       exchange 'vx.jobs'
       queue    'vx.worker.jobs'
-      ack      true
+      ack
 
       model Message::PerformJob
 
