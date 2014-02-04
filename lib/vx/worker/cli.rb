@@ -15,8 +15,16 @@ module Vx
       end
 
       def run
+
         trap('INT') {
           $stdout.puts " --> got INT, doing shutdown"
+          Thread.new do
+            Vx::Consumer.shutdown
+          end.join
+        }
+
+        trap('TERM') {
+          $stdout.puts " --> got TERM, doing shutdown"
           Thread.new do
             Vx::Consumer.shutdown
           end.join
