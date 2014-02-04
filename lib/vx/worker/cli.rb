@@ -1,6 +1,7 @@
 require 'optparse'
 require 'vx/common'
 require 'vx/consumer'
+require 'vx/instrumentation'
 
 module Vx
   module Worker
@@ -30,12 +31,16 @@ module Vx
           end.join
         }
 
-        workers = []
-        config.workers.to_i.times do |n|
-          $stdout.puts " --> boot Vx::Worker::JobsConsumer #{n}"
-          workers << Vx::Worker::JobsConsumer.subscribe
+        begin
+          workers = []
+          config.workers.to_i.times do |n|
+            $stdout.puts " --> boot Vx::Worker::JobsConsumer #{n}"
+            workers << Vx::Worker::JobsConsumer.subscribe
+          end
+          workers.map(&:wait)
+        rescue Exception => e
+          Vx::Instrumentation.handle_exception("cli_run.worker.vx", e, {})
         end
-        workers.map(&:wait)
       end
 
       private
