@@ -11,7 +11,7 @@ describe Vx::Worker::StartConnector do
 
   context "local connector" do
     before do
-      Vx::Worker.config.run = "local"
+      stub(Vx::Worker.config).run { :local }
     end
 
     it "should successfully start" do
@@ -22,7 +22,7 @@ describe Vx::Worker::StartConnector do
 
   context "docker connector", docker: true do
     before do
-      Vx::Worker.config.run = "docker"
+      stub(Vx::Worker.config).run { :docker }
     end
 
     it "should successfully start" do

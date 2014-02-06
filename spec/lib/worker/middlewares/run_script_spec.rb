@@ -17,7 +17,6 @@ describe Vx::Worker::RunScript do
   subject { connector_mid.call env }
 
   shared_examples "run script" do
-
     it "should be" do
       expect(subject).to eq 0
       job.release
@@ -46,15 +45,15 @@ describe Vx::Worker::RunScript do
 
   context "local connector" do
     before do
-      Vx::Worker.config.run = "local"
+      stub(Vx::Worker.config).run { :local }
     end
 
     it_should_behave_like "run script"
   end
 
-  context "local connector", docker: true do
+  context "docker connector", docker: true do
     before do
-      Vx::Worker.config.run = "docker"
+      stub(Vx::Worker.config).run { :docker }
     end
 
     it_should_behave_like "run script"

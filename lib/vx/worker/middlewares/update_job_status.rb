@@ -1,7 +1,4 @@
 require 'vx/message'
-require 'vx/common/error_notifier'
-
-require 'airbrake'
 require 'vx/instrumentation'
 
 module Vx

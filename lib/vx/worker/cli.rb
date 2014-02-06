@@ -1,5 +1,4 @@
 require 'optparse'
-require 'vx/common'
 require 'vx/consumer'
 require 'vx/instrumentation'
 

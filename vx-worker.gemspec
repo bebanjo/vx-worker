@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'dotenv'
-  spec.add_runtime_dependency 'vx-common',               "= 0.2.1"
+  spec.add_runtime_dependency 'vx-common',               "= 0.3.1"
   spec.add_runtime_dependency 'vx-message',              "= 0.4.1"
   spec.add_runtime_dependency 'vx-container_connector',  "= 0.3.1"
   spec.add_runtime_dependency 'vx-instrumentation',      '= 0.1.1'

@@ -1,3 +1,5 @@
+ENV['VX_ENV'] = 'test'
+
 Bundler.require(:test)
 
 require File.expand_path '../../lib/vx/worker', __FILE__
@@ -15,7 +17,7 @@ RSpec.configure do |config|
     Vx::Consumer::Testing.clear
     Vx::Worker.reset_config!
     Vx::Worker.config.run = "docker"
-
     Vx::Worker.initialize!
   end
+
 end
