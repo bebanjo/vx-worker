@@ -12,6 +12,9 @@ module Vx
 
       def call(env)
         options = config.connector_options
+        if image = env.job.message.image
+          options.merge!(image: image)
+        end
         env.connector = ContainerConnector.lookup(config.run, options)
 
         instrument("starting_container", env.job.instrumentation)

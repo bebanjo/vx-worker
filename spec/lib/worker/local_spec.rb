@@ -15,6 +15,13 @@ describe Vx::Worker::Local do
 
     it { should eq 0 }
 
+    context "with image" do
+      let(:options) { {
+        message: create(:message, 'PerformJob', image: "one")
+      } }
+      it { should eq 0 }
+    end
+
     context "when fail before_script" do
       let(:options) { { before_script: "/bin/false" } }
       it { should eq(-1) }
