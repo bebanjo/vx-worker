@@ -1,8 +1,0 @@
----
-- hosts: all
-  tags: services
-
-  tasks:
-
-  - name: services | create upstart job
-    template: src=templates/docker-boot.upstart.conf dest=/etc/init/docker-boot.conf

@@ -2,13 +2,17 @@
 
 set -e
 
-DOCKER="docker -H tcp://localhost"
+DOCKER="docker"
+
+if [ -z $PREFIX ] ; then
+  PREFIX=dmexe
+fi
 
 if [ -z $CONTAINER ] ; then
   echo "* Build SSH image"
-  ${DOCKER} build -t dmexe/precise-ssh:latest .
+  ${DOCKER} build -t $PREFIX/vexor-precise:latest .
 
-  CONTAINER=$(${DOCKER} run -d dmexe/precise-ssh)
+  CONTAINER=$(${DOCKER} run -d $PREFIX/vexor-precise)
   echo "* Spawn container ${CONTAINER}"
 fi
 
@@ -17,7 +21,7 @@ if [ -z $IMAGE_TAG ] ; then
 fi
 
 if [ -z $IMAGE_NAME ] ; then
-  IMAGE_NAME=dmexe/precise
+  IMAGE_NAME=$PREFIX/vexor-precise-full
 fi
 
 ADDR=$(${DOCKER} inspect ${CONTAINER} | grep IPAddress | cut -d '"' -f 4)
@@ -35,7 +39,7 @@ fi
 ANSIBLE_OPTS="--ask-pass -u vexor -s ${TAGS}"
 
 echo "* Run playbooks, type 'vexor' in 'SSH password:' prompt"
-ansible-playbook playbooks/site.yml $ANSIBLE_OPTS
+(cd playbooks && ansible-playbook site.yml $ANSIBLE_OPTS)
 
 echo "* Kill container ${CONTAINER}"
 $DOCKER kill $CONTAINER
