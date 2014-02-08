@@ -19,7 +19,7 @@ describe Vx::Worker::Job do
 
     it { should be_an_instance_of(Vx::Message::JobLog) }
     its(:job_id)   { should eq job.message.job_id }
-    its(:build_id) { should eq job.message.id     }
+    its(:build_id) { should eq job.message.build_id }
     its(:tm)       { should eq 1 }
     its(:log)      { should eq data }
 

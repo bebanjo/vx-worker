@@ -20,8 +20,9 @@ module Vx
         begin
           rs = app.call env
         rescue ::Timeout::Error => e
-          env.job.add_to_output("\n\nERROR: #{e.message}\n")
+          env.job.add_to_output("\n\nERROR: #{e.class}, #{e.message}\n")
         rescue ::Exception => e
+          env.job.add_to_output("\n\nERROR: #{e.class}, #{e.message}\n")
           Vx::Instrumentation.handle_exception("worker", e, env.to_h)
         end
 
@@ -54,7 +55,7 @@ module Vx
           tm = Time.now
           Message::JobStatus.new(
             project_id: job.message.project_id,
-            build_id:   job.message.id,
+            build_id:   job.message.build_id,
             job_id:     job.message.job_id,
             status:     status,
             tm:         tm.to_i,

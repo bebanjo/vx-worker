@@ -20,7 +20,7 @@ module Vx
       def instrumentation
         {
           job_id:   message.job_id,
-          build_id: message.id
+          build_id: message.build_id
         }
       end
 
@@ -39,7 +39,7 @@ module Vx
       def publish_job_log_message(str)
         @output_counter += 1
         log = Message::JobLog.new(
-          build_id: message.id,
+          build_id: message.build_id,
           job_id:   message.job_id,
           tm:       output_counter,
           log:      str

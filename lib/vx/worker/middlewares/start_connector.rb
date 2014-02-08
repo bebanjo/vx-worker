@@ -17,7 +17,7 @@ module Vx
         instrument("starting_container", env.job.instrumentation)
 
         env.connector.start do |spawner|
-          env.job.add_to_output "using #{Socket.gethostname}##{spawner.id}\n"
+          env.job.add_to_output "Using #{Socket.gethostname}/#{spawner.id}\n"
 
           instrument("container_started", env.job.instrumentation.merge(container: spawner.id))
 
