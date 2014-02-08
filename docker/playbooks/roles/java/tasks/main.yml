@@ -5,10 +5,12 @@
   apt: pkg=fuse state=present
 
 - name: install required packages
+  tags: java
   apt: pkg={{item}} state=latest
   with_items:
     - debconf
     - debconf-utils
+    - java-common
 
 - name: install openjdk packages
   apt: pkg={{item}} state=latest install_recommends=no
