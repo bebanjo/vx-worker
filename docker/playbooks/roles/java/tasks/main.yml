@@ -28,7 +28,7 @@
 
 - name: accept oracle licenses
   shell: >
-    /bin/echo -e ${item.item} shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+    /bin/echo -e {{item.item}} shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
   when: item.stdout != "yes"
   with_items: java_license_status.results
 

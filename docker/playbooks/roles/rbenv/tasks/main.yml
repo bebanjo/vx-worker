@@ -21,7 +21,7 @@
 
 - name: install ruby versions
   shell: >
-    {{ruby_build_root}}/bin/ruby-build {{item.item}} {{rbenv_root}}/versions/{{item.item}} &&
+    CONFIGURE_OPTS="--disable-install-doc" {{ruby_build_root}}/bin/ruby-build {{item.item}} {{rbenv_root}}/versions/{{item.item}} &&
     env PATH={{rbenv_root}}/versions/{{item.item}}/bin:\$PATH gem install bundler
   with_items: rbenv_installed_versions.results
   when: item.stat.exists == False
