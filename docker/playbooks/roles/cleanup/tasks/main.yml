@@ -9,3 +9,7 @@
 
 - name: autoremove apt packages
   shell: apt-get -qy autoremove
+
+- name: sync
+  shell: >
+    sync && sync && sync
