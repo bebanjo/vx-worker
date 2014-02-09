@@ -6,8 +6,10 @@ elasticsearch_version: 0.90.10
 
 services_onboot:
   - postgresql
-  - mysql
   - redis-server
+
+commands_onboot:
+  - /usr/sbin/mysqld &
 
 ruby_versions:
   - 2.0.0-p353
