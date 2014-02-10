@@ -3,6 +3,7 @@
 
   roles:
     - bootstrap
+    - vexor
 
     - java
     - rbenv
