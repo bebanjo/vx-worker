@@ -36,7 +36,7 @@ module Vx
             $stdout.puts " --> boot Vx::Worker::JobsConsumer #{n}"
             workers << Vx::Worker::JobsConsumer.subscribe
           end
-          workers.map(&:wait)
+          workers.map(&:wait_shutdown).map(&:join)
         rescue Exception => e
           Vx::Instrumentation.handle_exception("cli_run.worker.vx", e, {})
         end
