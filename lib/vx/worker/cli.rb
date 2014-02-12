@@ -30,15 +30,44 @@ module Vx
           end.join
         }
 
+        workers = []
         begin
-          workers = []
           config.workers.to_i.times do |n|
             $stdout.puts " --> boot Vx::Worker::JobsConsumer #{n}"
             workers << Vx::Worker::JobsConsumer.subscribe
           end
-          workers.map(&:wait_shutdown).map(&:join)
+          if @options[:once]
+            $stdout.puts " --> run once, wait jobs 5 minutes and shutdown"
+            run_once workers
+          else
+            run_loop workers
+          end
         rescue Exception => e
           Vx::Instrumentation.handle_exception("cli_run.worker.vx", e, {})
+        end
+      end
+
+      def run_loop(workers)
+        workers.map(&:wait_shutdown).map(&:join)
+      end
+
+      def run_once(workers)
+        shutdown_timeout = 5 * 60 # 5 minutes
+        last_run_at = Time.now
+
+        loop do
+          if workers.any?(&:running?)
+            last_run_at = Time.now
+          end
+
+          if (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
+            $stdout.puts " --> not more jobs, graceful shutdown"
+            workers.map(&:graceful_shutdown)
+            $stdout.puts " --> shutdown complete"
+            break
+          else
+            sleep 1
+          end
         end
       end
 
@@ -49,6 +78,9 @@ module Vx
             opts.banner = "Usage: vx-worker [options]"
             opts.on("-w", "--workers NUM", "Number of workers, default 1") do |v|
               @options[:workers] = v.to_i
+            end
+            opts.on("-o", "--once", "Run once") do |o|
+              @options[:once] = true
             end
           end.parse!
 
