@@ -9,6 +9,6 @@ gem 'vx-container_connector', :github => 'pacoguzman/vx-container_connector', :b
 #gem 'vx-instrumentation', path: "../vx-instrumentation"
 
 group :test do
-  gem 'rspec'
+  gem 'rspec', '2.14.1'
   gem 'rr'
 end
