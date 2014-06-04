@@ -13,7 +13,9 @@ module Vx
              run:          "docker",
              timeout:      30 * 60,
 
-             workers:          1,
+             workers:      1,
+             once:         false,
+             once_min:     0,
 
              docker: {
                user:       nil,

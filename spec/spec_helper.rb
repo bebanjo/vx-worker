@@ -5,6 +5,8 @@ Bundler.require(:test)
 require File.expand_path '../../lib/vx/worker', __FILE__
 
 require 'rspec/autorun'
+
+require 'timecop'
 require 'vx/consumer/testing'
 require 'vx/message/testing'
 

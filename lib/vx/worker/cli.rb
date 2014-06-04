@@ -8,8 +8,8 @@ module Vx
 
       include Helper::Config
 
-      def initialize
-        @options = {}
+      def initialize(opts = {})
+        @options = opts
         parse!
         Worker.initialize!
       end
@@ -52,7 +52,7 @@ module Vx
       end
 
       def run_once(workers)
-        shutdown_timeout = 5 * 60 # 5 minutes
+        started_at  = Time.now
         last_run_at = Time.now
 
         loop do
@@ -60,7 +60,7 @@ module Vx
             last_run_at = Time.now
           end
 
-          if (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
+          if once_timeout?(last_run_at, started_at)
             $stdout.puts " --> not more jobs, graceful shutdown"
             workers.map(&:graceful_shutdown)
             $stdout.puts " --> shutdown complete"
@@ -68,6 +68,22 @@ module Vx
           else
             sleep 1
           end
+        end
+      end
+
+      def once_timeout?(last_run_at, started_at)
+        shutdown_timeout            = 2 * 60 # 2 minutes
+        remainder_must_be_less_then = 55 # minutes
+        is_timeout = (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
+
+        if t = @options[:once_min]
+          remainder = (started_at.to_i / 60) % 60
+          #puts [is_timeout, started_at, remainder, t].inspect
+          is_timeout and
+            (remainder > t) and
+            (remainder < remainder_must_be_less_then)
+        else
+          is_timeout
         end
       end
 
@@ -81,6 +97,9 @@ module Vx
             end
             opts.on("-o", "--once", "Run once") do |o|
               @options[:once] = true
+            end
+            opts.on("-m", "--once-min", 'Minumun worked time') do |v|
+              @options[:once_min] = v.to_i
             end
           end.parse!
 
