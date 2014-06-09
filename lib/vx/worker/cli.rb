@@ -37,7 +37,8 @@ module Vx
             workers << Vx::Worker::JobsConsumer.subscribe
           end
           if @options[:once]
-            $stdout.puts " --> run once, wait jobs 5 minutes and shutdown"
+            tmout = @options[:once_min] || 5
+            $stdout.puts " --> run once, wait jobs #{tmout} minutes and shutdown"
             run_once workers
           else
             run_loop workers
