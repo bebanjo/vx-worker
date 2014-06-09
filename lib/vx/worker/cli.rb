@@ -67,22 +67,23 @@ module Vx
             $stdout.puts " --> shutdown complete"
             break
           else
-            sleep 1
+            sleep 5
           end
         end
       end
 
       def once_timeout?(last_run_at, started_at)
-        shutdown_timeout            = 2 * 60 # 2 minutes
+        shutdown_timeout            = 1 * 60 # 1 minute
         remainder_must_be_less_then = 55 # minutes
         is_timeout = (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
 
         if t = @options[:once_min]
-          remainder = (started_at.to_i / 60) % 60
-          #puts [is_timeout, started_at, remainder, t].inspect
-          is_timeout and
-            (remainder > t) and
-            (remainder < remainder_must_be_less_then)
+          remainder = ((Time.now.to_i - started_at.to_i) / 60.0).ceil % 60
+          rs = (is_timeout and
+                 (remainder > t) and
+                 (remainder < remainder_must_be_less_then))
+          puts " --> #{started_at.inspect}: #{rs} = (timeout:#{is_timeout} and #{remainder} > #{t} and #{remainder} < #{remainder_must_be_less_then})"
+          rs
         else
           is_timeout
         end

@@ -6,12 +6,12 @@ describe Vx::Worker::CLI do
   context "#once_timeout?" do
     context "without minimum hour minutes" do
       it "should be true when last_run_at greater then timeout" do
-        last_run_at = Time.now - (2 * 60 + 1)
+        last_run_at = Time.now - (1 * 60 + 1)
         expect(cli.once_timeout? last_run_at, nil).to be_true
       end
 
       it "should be false when last_run_at less then timeout" do
-        last_run_at = Time.now - (2 * 60 - 1)
+        last_run_at = Time.now - (1 * 60 - 1)
         expect(cli.once_timeout? last_run_at, nil).to be_false
       end
     end
@@ -30,24 +30,24 @@ describe Vx::Worker::CLI do
       end
 
       context "when last_run_at less then timeout" do
-        let(:last_run_at) { tm - (2 * 60 - 1) }
+        let(:last_run_at) { tm - (1 * 60 + 1) }
 
         it "should be false when worked time greater then minimin hour minutes" do
-          started_at = tm - (45 * 60 + 1)
+          started_at = tm - (44 * 60)
           expect(cli.once_timeout? last_run_at, started_at).to be_false
         end
       end
 
       context "when last_run_at greater then timeout" do
-        let(:last_run_at) { tm - (2 * 60 + 1) }
+        let(:last_run_at) { tm - (1 * 60 + 1) }
 
         it "should be true when worked time greater then minimin hour minutes" do
-          started_at = tm - (14 * 60)
+          started_at = tm - (45 * 60 + 1)
           expect(cli.once_timeout? last_run_at, started_at).to be_true
         end
 
         it "should be true when remainder of worked time greater then minimin hour minutes" do
-          started_at = tm - (74 * 60)
+          started_at = tm - (105 * 60 + 1)
           expect(cli.once_timeout? last_run_at, started_at).to be_true
         end
 
@@ -64,12 +64,12 @@ describe Vx::Worker::CLI do
         context "and remainder greater then 55 minutes" do
 
           it "should be false when worked time greater then minimin hour minutes" do
-            started_at = tm - (3 * 60)
+            started_at = tm - (55 * 60 + 1)
             expect(cli.once_timeout? last_run_at, started_at).to be_false
           end
 
           it "should be false when remainder of worked time greater then minimin hour minutes" do
-            started_at = tm - (3 * 60)
+            started_at = tm - (115 * 60 + 1)
             expect(cli.once_timeout? last_run_at, started_at).to be_false
           end
         end
