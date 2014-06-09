@@ -98,7 +98,7 @@ module Vx
             opts.on("-o", "--once", "Run once") do |o|
               @options[:once] = true
             end
-            opts.on("-m", "--once-min", 'Minumun worked time') do |v|
+            opts.on("-m", "--once-min NUM", 'Minumun worked time') do |v|
               @options[:once_min] = v.to_i
             end
           end.parse!
