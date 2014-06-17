@@ -73,7 +73,7 @@ module Vx
       end
 
       def once_timeout?(last_run_at, started_at)
-        shutdown_timeout            = 1 * 60 # 1 minute
+        shutdown_timeout            = 10 * 60 # 10 minutes
         remainder_must_be_less_then = 55 # minutes
         is_timeout = (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
 
