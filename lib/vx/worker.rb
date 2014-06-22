@@ -3,7 +3,7 @@ require 'pathname'
 require 'thread'
 
 require 'dotenv'
-Dotenv.load "#{File.expand_path("../../../", __FILE__)}/.env", "/etc/vexor/Envfile"
+Dotenv.load "#{File.expand_path("../../../", __FILE__)}/.env", "/etc/vexor/vxworker.env"
 
 require File.expand_path("../worker/ext/string", __FILE__)
 require File.expand_path("../worker/version",    __FILE__)
