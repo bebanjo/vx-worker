@@ -6,7 +6,7 @@ module Vx
 
       extend Hashr::EnvDefaults
 
-      self.env_namespace = 'vx'
+      self.env_namespace = 'vx_worker'
       self.raise_missing_keys = true
 
       define amqp_url:     nil,
