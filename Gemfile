@@ -10,5 +10,6 @@ gem 'vx-container_connector', :github => 'pacoguzman/vx-container_connector', :b
 
 group :test do
   gem 'rspec', '2.14.1'
+  gem 'timecop'
   gem 'rr'
 end

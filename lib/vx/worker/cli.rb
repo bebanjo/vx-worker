@@ -8,8 +8,8 @@ module Vx
 
       include Helper::Config
 
-      def initialize
-        @options = {}
+      def initialize(opts = {})
+        @options = opts
         parse!
         Worker.initialize!
       end
@@ -36,12 +36,10 @@ module Vx
             $stdout.puts " --> boot Vx::Worker::JobsConsumer #{n}"
             workers << Vx::Worker::JobsConsumer.subscribe
           end
-          if @options[:once]
-            $stdout.puts " --> run once, wait jobs 5 minutes and shutdown"
-            run_once workers
-          else
-            run_loop workers
-          end
+
+          Control.new(workers).watch_async
+
+          run_loop workers
         rescue Exception => e
           Vx::Instrumentation.handle_exception("cli_run.worker.vx", e, {})
         end
@@ -49,26 +47,6 @@ module Vx
 
       def run_loop(workers)
         workers.map(&:wait_shutdown).map(&:join)
-      end
-
-      def run_once(workers)
-        shutdown_timeout = 5 * 60 # 5 minutes
-        last_run_at = Time.now
-
-        loop do
-          if workers.any?(&:running?)
-            last_run_at = Time.now
-          end
-
-          if (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
-            $stdout.puts " --> not more jobs, graceful shutdown"
-            workers.map(&:graceful_shutdown)
-            $stdout.puts " --> shutdown complete"
-            break
-          else
-            sleep 1
-          end
-        end
       end
 
       private
@@ -81,6 +59,9 @@ module Vx
             end
             opts.on("-o", "--once", "Run once") do |o|
               @options[:once] = true
+            end
+            opts.on("-m", "--once-min NUM", 'Minumun worked time') do |v|
+              @options[:once_min] = v.to_i
             end
           end.parse!
 

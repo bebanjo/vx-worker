@@ -6,14 +6,16 @@ module Vx
 
       extend Hashr::EnvDefaults
 
-      self.env_namespace = 'vx'
+      self.env_namespace = 'vx_worker'
       self.raise_missing_keys = true
 
       define amqp_url:     nil,
              run:          "docker",
              timeout:      30 * 60,
 
-             workers:          1,
+             workers:      1,
+             once:         false,
+             once_min:     0,
 
              docker: {
                user:       nil,
