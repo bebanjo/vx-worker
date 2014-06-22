@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Vx::Worker::CLI do
   let(:cli) { described_class.new }
 
+=begin
   context "#once_timeout?" do
     context "without minimum hour minutes" do
       it "should be true when last_run_at greater then timeout" do
@@ -76,5 +77,6 @@ describe Vx::Worker::CLI do
       end
     end
   end
+=end
 
 end

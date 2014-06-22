@@ -14,6 +14,8 @@ module Vx
     autoload :JobsConsumer,          File.expand_path("../worker/consumers/jobs_consumer",             __FILE__)
     autoload :JobLogsConsumer,       File.expand_path("../worker/consumers/job_logs_consumer",         __FILE__)
     autoload :JobStatusConsumer,     File.expand_path("../worker/consumers/job_status_consumer",       __FILE__)
+    autoload :ControlConsumer,       File.expand_path("../worker/consumers/control_consumer",          __FILE__)
+    autoload :Control,               File.expand_path("../worker/control",                             __FILE__)
     autoload :Configuration,         File.expand_path("../worker/configuration",                       __FILE__)
     autoload :Job,                   File.expand_path("../worker/job",                                 __FILE__)
     autoload :Local,                 File.expand_path("../worker/local",                               __FILE__)

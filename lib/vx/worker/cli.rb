@@ -36,13 +36,10 @@ module Vx
             $stdout.puts " --> boot Vx::Worker::JobsConsumer #{n}"
             workers << Vx::Worker::JobsConsumer.subscribe
           end
-          if @options[:once]
-            tmout = @options[:once_min] || 5
-            $stdout.puts " --> run once, wait jobs #{tmout} minutes and shutdown"
-            run_once workers
-          else
-            run_loop workers
-          end
+
+          Control.new(workers).watch_async
+
+          run_loop workers
         rescue Exception => e
           Vx::Instrumentation.handle_exception("cli_run.worker.vx", e, {})
         end
@@ -50,43 +47,6 @@ module Vx
 
       def run_loop(workers)
         workers.map(&:wait_shutdown).map(&:join)
-      end
-
-      def run_once(workers)
-        started_at  = Time.now
-        last_run_at = Time.now
-
-        loop do
-          if workers.any?(&:running?)
-            last_run_at = Time.now
-          end
-
-          if once_timeout?(last_run_at, started_at)
-            $stdout.puts " --> not more jobs, graceful shutdown"
-            workers.map(&:graceful_shutdown)
-            $stdout.puts " --> shutdown complete"
-            break
-          else
-            sleep 5
-          end
-        end
-      end
-
-      def once_timeout?(last_run_at, started_at)
-        shutdown_timeout            = 10 * 60 # 10 minutes
-        remainder_must_be_less_then = 55 # minutes
-        is_timeout = (last_run_at.to_i + shutdown_timeout) < Time.now.to_i
-
-        if t = @options[:once_min]
-          remainder = ((Time.now.to_i - started_at.to_i) / 60.0).ceil % 60
-          rs = (is_timeout and
-                 (remainder > t) and
-                 (remainder < remainder_must_be_less_then))
-          puts " --> #{started_at.inspect}: #{rs} = (timeout:#{is_timeout} and #{remainder} > #{t} and #{remainder} < #{remainder_must_be_less_then})"
-          rs
-        else
-          is_timeout
-        end
       end
 
       private
