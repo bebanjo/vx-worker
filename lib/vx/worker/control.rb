@@ -44,8 +44,12 @@ module Vx
 
           if timeout?
             $stdout.puts " --> not more jobs, graceful shutdown"
-            workers.map(&:graceful_shutdown)
-            notify_shutdown
+            instrument("shutdown.control", timeout: timeout) do
+              workers.map(&:graceful_shutdown)
+            end
+            instrument("notify.control", hostname: hostname) do
+              notify_shutdown
+            end
             $stdout.puts " --> shutdown complete"
             break
           else
