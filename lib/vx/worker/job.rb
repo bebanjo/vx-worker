@@ -19,8 +19,15 @@ module Vx
 
       def instrumentation
         {
-          job_id:   message.job_id,
-          build_id: message.build_id
+          company_id:   message.company_id,
+          company_name: message.company_name,
+          project_id:   message.project_id,
+          project_name: message.project_name,
+          build_id:     message.build_id,
+          build_number: message.build_number,
+          job_id:       message.job_id,
+          job_number:   message.job_number,
+          job_version:  message.job_version
         }
       end
 
@@ -39,17 +46,14 @@ module Vx
       def publish_job_log_message(str)
         @output_counter += 1
         log = Message::JobLog.new(
-          build_id: message.build_id,
-          job_id:   message.job_id,
-          tm:       output_counter,
-          log:      str
+          instrumentation.merge(
+            tm: output_counter,
+            log: str
+          )
         )
         JobLogsConsumer.publish(
           log,
-          headers: {
-            build_id: log.build_id,
-            job_id:   log.job_id
-          }
+          headers: instrumentation
         )
         log
       end
