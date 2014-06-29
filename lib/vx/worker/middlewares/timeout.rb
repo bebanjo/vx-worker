@@ -5,16 +5,22 @@ module Vx
 
     Timeout = Struct.new(:app) do
 
+      DEFAULT = 60 * 60
+
       def call(env)
         rs = nil
-        ::Timeout.timeout(_timeout) do
+        ::Timeout.timeout(timeout_value env) do
           rs = app.call env
         end
         rs
       end
 
-      def _timeout
-        30 * 60
+      def timeout_value(env)
+        env.job.timeout_value || default_timeout
+      end
+
+      def default_timeout
+        DEFAULT
       end
 
     end

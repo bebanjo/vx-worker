@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'vx/common/spawn'
 
 describe Vx::Worker::RunScript do
   let(:exit_code)     { 0 }
@@ -17,6 +18,7 @@ describe Vx::Worker::RunScript do
   subject { connector_mid.call env }
 
   shared_examples "run script" do
+
     it "should be" do
       expect(subject).to eq 0
       job.release
@@ -40,6 +42,26 @@ describe Vx::Worker::RunScript do
         job.release
         expect(all_job_log_output).to match("after_script")
       end
+    end
+
+    it "should raise error when read timeout happened" do
+      job.message.script = 'sleep 3'
+      mock(mid).default_read_timeout { 0.1 }
+
+      expect{ subject }.to raise_error(
+        ::Vx::Common::Spawn::ReadTimeoutError,
+        "No output has been received in the last 0.1 seconds"
+      )
+    end
+
+    it "should raise error when job read timeout happened" do
+      job.message.script = 'sleep 3'
+      job.message.read_timeout = 0.1
+
+      expect{ subject }.to raise_error(
+        ::Vx::Common::Spawn::ReadTimeoutError,
+        "No output has been received in the last 0.1 seconds"
+      )
     end
   end
 

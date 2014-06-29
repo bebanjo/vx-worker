@@ -25,6 +25,16 @@ describe Vx::Worker::Job do
     ) }
   end
 
+  it "should be timeout_value and read_timeout_value" do
+    without = described_class.new(create :message, 'PerformJob')
+    expect(without.timeout_value).to be_nil
+    expect(without.read_timeout_value).to be_nil
+
+    with = described_class.new(create :message, 'PerformJob', timeout: 10, read_timeout: 20)
+    expect(with.timeout_value).to eq 10
+    expect(with.read_timeout_value).to eq 20
+  end
+
   context "publish_job_log_message" do
     let(:data) { 'log' }
     subject { job.publish_job_log_message data }

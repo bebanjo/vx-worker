@@ -31,6 +31,14 @@ module Vx
         }
       end
 
+      def timeout_value
+        message.timeout
+      end
+
+      def read_timeout_value
+        message.read_timeout
+      end
+
       def add_command_to_output(cmd)
         add_to_output "$ #{cmd}\n"
       end
