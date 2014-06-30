@@ -56,7 +56,7 @@ describe Vx::Worker::RunScript do
 
     it "should raise error when job read timeout happened" do
       job.message.script = 'sleep 3'
-      job.message.read_timeout = 0.1
+      job.message.job_read_timeout = 0.1
 
       expect{ subject }.to raise_error(
         ::Vx::Common::Spawn::ReadTimeoutError,

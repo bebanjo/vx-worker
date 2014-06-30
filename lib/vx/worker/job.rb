@@ -32,11 +32,11 @@ module Vx
       end
 
       def timeout_value
-        message.timeout
+        message.job_timeout
       end
 
       def read_timeout_value
-        message.read_timeout
+        message.job_read_timeout
       end
 
       def add_command_to_output(cmd)

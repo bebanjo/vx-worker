@@ -30,7 +30,7 @@ describe Vx::Worker::Job do
     expect(without.timeout_value).to be_nil
     expect(without.read_timeout_value).to be_nil
 
-    with = described_class.new(create :message, 'PerformJob', timeout: 10, read_timeout: 20)
+    with = described_class.new(create :message, 'PerformJob', job_timeout: 10, job_read_timeout: 20)
     expect(with.timeout_value).to eq 10
     expect(with.read_timeout_value).to eq 20
   end
