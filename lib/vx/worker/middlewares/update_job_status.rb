@@ -48,27 +48,23 @@ module Vx
             "update_job_status",
             job.instrumentation.merge(status: status)
           )
-          publish_status create_message(job, status)
+          publish_status job, create_message(job, status)
         end
 
         def create_message(job, status)
           tm = Time.now
           Message::JobStatus.new(
-            project_id: job.message.project_id,
-            build_id:   job.message.build_id,
-            job_id:     job.message.job_id,
-            status:     status,
-            tm:         tm.to_i,
+            job.instrumentation.merge(
+              status: status,
+              tm: tm.to_i
+            )
           )
         end
 
-        def publish_status(message)
+        def publish_status(job, message)
           JobStatusConsumer.publish(
             message,
-            headers: {
-              build_id:   message.build_id,
-              job_id:     message.job_id
-            }
+            headers: job.instrumentation
           )
         end
 

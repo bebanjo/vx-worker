@@ -10,7 +10,29 @@ describe Vx::Worker::Job do
     its(:message)         { should eq message }
     its(:output)          { should be_an_instance_of(Vx::Common::OutputBuffer) }
     its(:output_counter)  { should eq 0 }
-    its(:instrumentation) { should eq(job_id: 2, build_id: 1) }
+    its(:instrumentation) { should eq(
+      company_id:   "1",
+      company_name: "company name",
+      project_id:   "2",
+      project_name: "project name",
+      build_id:     "3",
+      build_number:  4,
+      job_id:       "5",
+      job_number:    6,
+      job_version:   1,
+      job_id:       "5",
+      build_id:     "3"
+    ) }
+  end
+
+  it "should be timeout_value and read_timeout_value" do
+    without = described_class.new(create :message, 'PerformJob')
+    expect(without.timeout_value).to be_nil
+    expect(without.read_timeout_value).to be_nil
+
+    with = described_class.new(create :message, 'PerformJob', job_timeout: 10, job_read_timeout: 20)
+    expect(with.timeout_value).to eq 10
+    expect(with.read_timeout_value).to eq 20
   end
 
   context "publish_job_log_message" do

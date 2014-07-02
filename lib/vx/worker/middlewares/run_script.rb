@@ -40,20 +40,20 @@ module Vx
           file = [env.spawner.work_dir, ".ci_build.sh"].join("/")
 
           script = [upload_sh_command(file, script_content(env))]
-          script << "env - HOME=$HOME bash -l #{file}"
+          script << "env - USER=$USER HOME=$HOME bash -l #{file}"
           script = script.join(" && ")
 
-          env.spawner.spawn script, read_timeout: read_timeout, &env.job.method(:add_to_output)
+          env.spawner.spawn script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
         end
 
         def run_after_script(env)
           file = [env.spawner.work_dir, ".ci_after_build.sh"].join("/")
 
           script = [upload_sh_command(file, after_script_content(env))]
-          script << "env - HOME=$HOME bash -l #{file}"
+          script << "env - USER=$USER HOME=$HOME bash -l #{file}"
           script = script.join(" && ")
 
-          env.spawner.spawn script, read_timeout: read_timeout, &env.job.method(:add_to_output)
+          env.spawner.spawn script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
         end
 
         def script_content(env)
@@ -80,7 +80,11 @@ module Vx
           buf.strip
         end
 
-        def read_timeout
+        def read_timeout(env)
+          env.job.read_timeout_value || default_read_timeout
+        end
+
+        def default_read_timeout
           10 * 60
         end
 
