@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/pacoguzman/vx-container_connector.git
-  revision: ea522ddd3628ebce9d4af94a6f2463810865b33c
+  revision: edbecde04a9d548860a050b58adbbf4a4c092be7
   branch: bebanjo
   specs:
-    vx-container_connector (0.5.3)
-      docker-api (= 1.11.0)
+    vx-container_connector (0.5.4)
+      docker-api (= 1.12.0)
       vx-common-spawn (= 0.0.8)
 
 PATH
@@ -15,14 +15,14 @@ PATH
       hashr (= 0.0.22)
       vx-common (= 0.3.1)
       vx-consumer (= 0.1.8)
-      vx-container_connector (= 0.5.3)
+      vx-container_connector (= 0.5.4)
       vx-instrumentation (= 0.1.1)
-      vx-message (= 0.5.0)
+      vx-message (= 0.6.2)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.1.1)
+    activesupport (4.1.4)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -33,14 +33,14 @@ GEM
       multi_json
     amq-protocol (1.9.2)
     archive-tar-minitar (0.5.2)
-    beefcake (0.3.7)
+    beefcake (0.5.0)
     builder (3.2.2)
     bunny (1.3.1)
       amq-protocol (>= 1.9.2)
     diff-lcs (1.2.5)
-    docker-api (1.11.0)
+    docker-api (1.12.0)
       archive-tar-minitar
-      excon (>= 0.34.0)
+      excon (>= 0.37.0)
       json
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
@@ -79,8 +79,8 @@ GEM
     vx-instrumentation (0.1.1)
       activesupport (~> 4.0)
       airbrake
-    vx-message (0.5.0)
-      beefcake (= 0.3.7)
+    vx-message (0.6.2)
+      beefcake (= 0.5.0)
 
 PLATFORMS
   ruby
