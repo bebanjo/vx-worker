@@ -11,7 +11,7 @@ module Vx
       include Helper::Instrument
 
       def call(env)
-        options = config.connector_options
+        options = config.connector_options.dup
         if image = env.job.message.image
           options.merge!(image: image)
         end
