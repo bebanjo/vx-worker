@@ -40,7 +40,7 @@ module Vx
           file = [env.spawner.work_dir, ".ci_build.sh"].join("/")
 
           script = [upload_sh_command(file, script_content(env))]
-          script << "env - USER=$USER HOME=$HOME bash -l #{file}"
+          script << "env - USER=$USER HOME=$HOME SHELL=/bin/bash bash -l #{file}"
           script = script.join(" && ")
 
           env.spawner.spawn script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
@@ -50,7 +50,7 @@ module Vx
           file = [env.spawner.work_dir, ".ci_after_build.sh"].join("/")
 
           script = [upload_sh_command(file, after_script_content(env))]
-          script << "env - USER=$USER HOME=$HOME bash -l #{file}"
+          script << "env - USER=$USER HOME=$HOME SHELL=/bin/bash bash -l #{file}"
           script = script.join(" && ")
 
           env.spawner.spawn script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
