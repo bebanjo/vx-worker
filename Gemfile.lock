@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/pacoguzman/vx-container_connector.git
-  revision: edbecde04a9d548860a050b58adbbf4a4c092be7
+  revision: 34022f2de0e45b716512aa796cb0ea32cb511b89
   branch: bebanjo
   specs:
     vx-container_connector (0.5.4)
