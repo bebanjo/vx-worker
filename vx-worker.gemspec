@@ -21,8 +21,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dotenv'
   spec.add_runtime_dependency 'vx-common',               "= 0.3.1"
   spec.add_runtime_dependency 'vx-message',              "= 0.6.2"
-  spec.add_runtime_dependency 'vx-container_connector',  "= 0.5.4"
-  spec.add_runtime_dependency 'vx-instrumentation',      '= 0.1.1'
+  spec.add_runtime_dependency 'vx-container_connector',  "= 0.5.7"
+  spec.add_runtime_dependency 'vx-instrumentation',      '= 0.1.8'
   spec.add_runtime_dependency 'vx-consumer',             '= 0.1.8'
 
   spec.add_runtime_dependency 'hashr',                   '= 0.0.22'
