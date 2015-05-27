@@ -39,7 +39,7 @@ describe Vx::Worker::Job do
     let(:data) { 'log' }
     subject { job.publish_job_log_message data }
 
-    it { should be_an_instance_of(Vx::Message::JobLog) }
+    it { should be_an_instance_of(Vx::Lib::Message::JobLog) }
     its(:job_id)   { should eq job.message.job_id }
     its(:build_id) { should eq job.message.build_id }
     its(:tm)       { should eq 1 }

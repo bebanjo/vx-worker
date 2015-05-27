@@ -8,7 +8,7 @@ def create(who, *args)
 
   when :message
     name  = args.shift
-    klass = Vx::Message.const_get name
+    klass = Vx::Lib::Message.const_get name
     klass.test_message options
 
   when :job

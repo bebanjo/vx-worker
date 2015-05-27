@@ -8,7 +8,7 @@ require 'rspec/autorun'
 
 require 'timecop'
 require 'vx/consumer/testing'
-require 'vx/message/testing'
+require 'vx/lib/message/testing'
 
 Dir[File.expand_path("../..", __FILE__) + "/spec/support/**/*.rb"].each {|f| require f}
 

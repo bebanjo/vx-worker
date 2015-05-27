@@ -1,4 +1,4 @@
-require 'vx/message'
+require 'vx/lib/message'
 require 'vx/instrumentation'
 
 module Vx
@@ -53,7 +53,7 @@ module Vx
 
         def create_message(job, status)
           tm = Time.now
-          Message::JobStatus.new(
+          Vx::Lib::Message::JobStatus.new(
             job.instrumentation.merge(
               status: status,
               tm: tm.to_i

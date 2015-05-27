@@ -1,4 +1,4 @@
-require 'vx/message'
+require 'vx/lib/message'
 require 'vx/common'
 
 module Vx
@@ -53,7 +53,7 @@ module Vx
 
       def publish_job_log_message(str)
         @output_counter += 1
-        log = Message::JobLog.new(
+        log = Vx::Lib::Message::JobLog.new(
           instrumentation.merge(
             tm: output_counter,
             log: str

@@ -1,5 +1,5 @@
 require 'vx/consumer'
-require 'vx/message'
+require 'vx/lib/message'
 
 module Vx
   module Worker

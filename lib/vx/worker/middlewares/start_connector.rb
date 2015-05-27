@@ -1,6 +1,6 @@
 require 'socket'
 require 'pathname'
-require 'vx/container_connector'
+require 'vx/lib/container'
 
 module Vx
   module Worker
@@ -15,7 +15,7 @@ module Vx
         if image = env.job.message.image
           options.merge!(image: image)
         end
-        env.connector = ContainerConnector.lookup(config.run, options)
+        env.connector = Vx::Lib::Container.lookup(config.run, options)
 
         instrument("starting_container", env.job.instrumentation)
 
