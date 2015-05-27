@@ -49,7 +49,7 @@ describe Vx::Worker::RunScript do
       mock(mid).default_read_timeout { 0.1 }
 
       expect{ subject }.to raise_error(
-        ::Vx::Common::Spawn::ReadTimeoutError,
+        ::Vx::Lib::Shell::ReadTimeoutError,
         "No output has been received in the last 0.1 seconds"
       )
     end
@@ -59,7 +59,7 @@ describe Vx::Worker::RunScript do
       job.message.job_read_timeout = 0.1
 
       expect{ subject }.to raise_error(
-        ::Vx::Common::Spawn::ReadTimeoutError,
+        ::Vx::Lib::Shell::ReadTimeoutError,
         "No output has been received in the last 0.1 seconds"
       )
     end

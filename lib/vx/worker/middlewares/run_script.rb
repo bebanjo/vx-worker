@@ -43,7 +43,7 @@ module Vx
           script << "env - USER=$USER HOME=$HOME SHELL=/bin/bash bash -l #{file}"
           script = script.join(" && ")
 
-          env.spawner.spawn script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
+          env.spawner.exec script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
         end
 
         def run_after_script(env)
@@ -53,7 +53,7 @@ module Vx
           script << "env - USER=$USER HOME=$HOME SHELL=/bin/bash bash -l #{file}"
           script = script.join(" && ")
 
-          env.spawner.spawn script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
+          env.spawner.exec script, read_timeout: read_timeout(env), &env.job.method(:add_to_output)
         end
 
         def script_content(env)
@@ -74,7 +74,7 @@ module Vx
         def read_state(env)
           buf = ""
           state_file = "#{env.spawner.work_dir}/.ci_state"
-          env.spawner.spawn "cat #{state_file}" do |out|
+          env.spawner.exec "cat #{state_file}" do |out|
             buf << out
           end
           buf.strip
